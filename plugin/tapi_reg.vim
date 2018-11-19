@@ -16,7 +16,7 @@ function! Tapi_reg(bufnr, args) abort
       call call('setreg', a:args[1:])
     endif
   elseif a:args[0] ==# 'get' && len(a:args) >= 3
-    if a:args[1] =~# '\v^(-l|--list)$'
+    if a:args[1] ==# '--list'
       let lines = split(execute('registers', 'silent'), '\n')
       let filename = a:args[2]
     else

@@ -5,13 +5,13 @@ vimreg() {
   fi
 
   local get=false
-  case "$1" in
-    --get) get=true; shift ;;
-    --set) shift ;;
-  esac
-
+  local list=false
   local reg='"'
-  [ $# -gt 0 ] && reg=$1
+  case "$1" in
+    --get|-g) get=true; shift ;;
+    --list|-l) get=true; reg='--list'; shift ;;
+  esac
+  [ $reg != '--list' ] && [ $# -gt 0 ] && reg=$1
 
   if $get; then
     local fifo
