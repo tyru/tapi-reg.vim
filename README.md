@@ -4,11 +4,8 @@ Seamless vim register manipulation in :terminal via terminal-api
 
 # Setup
 
-In your .bashrc
-
-```
-source <this repo>/macros/vimreg.sh
-```
+* Install [`jq`](https://stedolan.github.io/jq/) command
+* Add `source <this repo>/macros/vimreg.sh` in your `.bashrc`
 
 # `:terminal` --> Vim: send string to vim register
 
