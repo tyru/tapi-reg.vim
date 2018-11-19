@@ -15,9 +15,15 @@ function! Tapi_reg(bufnr, args) abort
     if !s:set_clipboard(a:args[1], a:args[2])
       call call('setreg', a:args[1:])
     endif
-  elseif a:args[0] ==# 'get' && len(a:args) >= 2
-    " Send string with EOF
-    call term_sendkeys(a:bufnr, getreg(a:args[1], 1) . "\<C-d>")
+  elseif a:args[0] ==# 'get' && len(a:args) >= 3
+    if a:args[1] =~# '\v^(-l|--list)$'
+      let lines = split(execute('registers', 'silent'), '\n')
+      let filename = a:args[2]
+    else
+      let lines = getreg(a:args[1], 1, 1)
+      let filename = a:args[2]
+    endif
+    call writefile(lines, filename)
   endif
 endfunction
 
