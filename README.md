@@ -81,3 +81,20 @@ $ vimreg -l
 "#   plugin/tapi_reg.vim
 "/   --list
 ```
+
+# Pseudo register support (only in WSL!)
+
+In Windows Subsystem Linux environment, even if `has('clipboard') == 0`, you can use clipboard registers (`+` or `*`)
+
+```
+$ vimreg +
+Send
+this
+text
+to
+clipboard
+^D
+$
+```
+
+NOTE: if your vim returns `1` for `:echo has('clipboard')`, `vimreg` can also manipulate clipboard registers as usual.
