@@ -5,7 +5,6 @@ vimreg() {
   fi
 
   local get=false
-  local list=false
   local reg='"'
   case "$1" in
     --get|-g) get=true; shift ;;
@@ -17,19 +16,15 @@ vimreg() {
     local fifo
     fifo=$(mktemp -u)
     mkfifo "$fifo"
-    call_tapi_reg get "$reg" "$fifo"
+    __call_tapi_reg get "$reg" "$fifo"
     cat "$fifo"
     rm "$fifo"
   else
-    call_tapi_reg set "$reg" "$(cat)"
+    __call_tapi_reg set "$reg" "$(cat)"
   fi
 }
 
-to_json_string() {
-  echo "\"${1//\"/\\\"}\""
-}
-
-call_tapi_reg() {
+__call_tapi_reg() {
   local cmd
   local arg1
   local arg2
