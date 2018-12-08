@@ -3,6 +3,10 @@ vimreg() {
     echo 'error: jq is not installed.' >&2
     return 1
   fi
+  if [ -z "$VIM_TERMINAL" ]; then
+    echo 'error: you are running vimreg outside vim terminal' >&2
+    return 2
+  fi
 
   local get=false
   local reg='"'
