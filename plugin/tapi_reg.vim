@@ -13,7 +13,9 @@ function! Tapi_reg(bufnr, args) abort
   endif
   if a:args[0] ==# 'set' && len(a:args) >= 3
     if !s:set_clipboard(a:args[1], a:args[2])
-      call call('setreg', a:args[1:])
+      let [reg, file] = a:args[1:2]
+      let value = join(readfile(file), "\n")
+      call setreg(reg, value)
     endif
   elseif a:args[0] ==# 'get' && len(a:args) >= 3
     if a:args[1] ==# '--list'
@@ -27,11 +29,12 @@ function! Tapi_reg(bufnr, args) abort
   endif
 endfunction
 
-function! s:set_clipboard(reg, value) abort
+function! s:set_clipboard(reg, file) abort
   if (a:reg ==# '+' || a:reg ==# '*') && !has('clipboard')
     let cmd = s:is_wsl() ? 'clip.exe' : has('macunix') ? 'pbcopy' : ''
     if !empty(cmd)
-      call system('clip.exe', a:value)
+      let value = join(readfile(a:file), "\n")
+      call system('clip.exe', value)
       return !v:shell_error
     endif
   endif

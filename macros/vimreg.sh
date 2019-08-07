@@ -16,16 +16,17 @@ vimreg() {
   esac
   [ $reg != '--list' ] && [ $# -gt 0 ] && reg=$1
 
+  local file
+  file=$(mktemp -u)
   if $get; then
-    local fifo
-    fifo=$(mktemp -u)
-    mkfifo "$fifo"
-    __call_tapi_reg get "$reg" "$fifo"
-    cat "$fifo"
-    rm "$fifo"
+    mkfifo "$file"
+    __call_tapi_reg get "$reg" "$file"
+    cat "$file"
   else
-    __call_tapi_reg set "$reg" "$(cat)"
+    cat >"$file"
+    __call_tapi_reg set "$reg" "$file"
   fi
+  rm "$file"
 }
 
 __call_tapi_reg() {
