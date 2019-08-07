@@ -28,9 +28,12 @@ function! Tapi_reg(bufnr, args) abort
 endfunction
 
 function! s:set_clipboard(reg, value) abort
-  if (a:reg ==# '+' || a:reg ==# '*') && !has('clipboard') && s:is_wsl()
-    call system('clip.exe', a:value)
-    return !v:shell_error
+  if (a:reg ==# '+' || a:reg ==# '*') && !has('clipboard')
+    let cmd = s:is_wsl() ? 'clip.exe' : has('macunix') ? 'pbcopy' : ''
+    if !empty(cmd)
+      call system('clip.exe', a:value)
+      return !v:shell_error
+    endif
   endif
   return 0
 endfunction
