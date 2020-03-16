@@ -40,6 +40,27 @@ register.
 $
 ```
 
+You can use `vimreg` as `tee` command using `--tee` (`-t`) option.
+It uses `tee` instead of `cat` to receive standard input.
+
+```
+$ vm_stat -c 10 1 | vimreg -t
+```
+
+Note that `vimreg` sends request(s) to vim **after standard input is fully
+received (it doesn't append input to vim register incrementally).**
+That means, if Ctrl-C was pressed before standard input was closed, vimreg
+doesn't sets vim register.
+
+```
+$ while :; do echo 'something heavy task ...'; sleep 1; done | vimreg -t
+something heavy task ...
+something heavy task ...
+something heavy task ...
+^C
+$ # vim register is not updated here!
+```
+
 # Vim --> `:terminal`: get vim register content
 
 `vimreg` supports `--get` or `-g` option.
