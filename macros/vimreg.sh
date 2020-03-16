@@ -12,9 +12,11 @@ vimreg() {
 
   local get=false
   local reg='"'
+  local tee=false
   case "$1" in
     --get|-g) get=true; shift ;;
     --list|-l) get=true; reg='--list'; shift ;;
+    --tee|-t) tee=true; shift ;;
     *) ;;
   esac
   [ "${reg}" != '--list' ] && [ $# -gt 0 ] && reg=$1
@@ -26,7 +28,11 @@ vimreg() {
     __call_tapi_reg get "${reg}" "${file}"
     cat "${file}"
   else
-    cat >"${file}"
+    if ${tee}; then
+      tee "${file}"
+    else
+      cat >"${file}"
+    fi
     __call_tapi_reg set "${reg}" "${file}"
   fi
   rm "${file}"
