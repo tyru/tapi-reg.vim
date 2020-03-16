@@ -23,6 +23,8 @@ vimreg() {
 
   local file
   file=$(mktemp -u)
+  # shellcheck disable=SC2064
+  trap "rm -f '${file}'" EXIT INT TERM
   if ${get}; then
     mkfifo "${file}"
     __call_tapi_reg get "${reg}" "${file}"
@@ -35,7 +37,6 @@ vimreg() {
     fi
     __call_tapi_reg set "${reg}" "${file}"
   fi
-  rm "${file}"
 }
 
 __call_tapi_reg() {
